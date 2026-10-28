@@ -25,8 +25,8 @@ export default function CommentsHome() {
           <a href="https://blog.songhai.site">博客 ↗</a>
         </nav>
         <p style={{ marginTop: 64, fontSize: 12, color: '#75706a' }}>
-          <a href="https://github.com/SonghaiFan/franklin-comments">Franklin Comments</a> · Built with{' '}
-          <a href="https://github.com/giscus/giscus">giscus</a>
+          <a href="https://github.com/SonghaiFan/franklin-comments">Franklin Comments</a> · Built
+          with <a href="https://github.com/giscus/giscus">giscus</a>
         </p>
       </main>
     </>
