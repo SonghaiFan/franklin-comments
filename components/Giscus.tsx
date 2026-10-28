@@ -15,7 +15,8 @@ interface IGiscusProps {
 
 export default function Giscus({ onDiscussionCreateRequest, onError }: IGiscusProps) {
   const { token, origin } = useContext(AuthContext);
-  const { t } = useGiscusTranslation();
+  const { t, lang } = useGiscusTranslation();
+  const chinese = lang.startsWith('zh');
   const {
     repo,
     term,
@@ -149,24 +150,15 @@ export default function Giscus({ onDiscussionCreateRequest, onError }: IGiscusPr
             ) : null}
           </div>
           {data.totalCommentCount > 0 ? (
-            <ul className="gsc-right-header BtnGroup">
-              <li
-                className={`BtnGroup-item ${orderBy === 'oldest' ? 'BtnGroup-item--selected' : ''}`}
-                aria-current={orderBy === 'oldest'}
-              >
-                <button className="btn" onClick={() => setOrderBy('oldest')}>
-                  {t('oldest')}
-                </button>
-              </li>
-              <li
-                className={`BtnGroup-item ${orderBy === 'newest' ? 'BtnGroup-item--selected' : ''}`}
-                aria-current={orderBy === 'newest'}
-              >
-                <button className="btn" onClick={() => setOrderBy('newest')}>
-                  {t('newest')}
-                </button>
-              </li>
-            </ul>
+            <select
+              className="songhai-sort"
+              aria-label={chinese ? '留言排序' : 'Comment order'}
+              value={orderBy}
+              onChange={(event) => setOrderBy(event.currentTarget.value as CommentOrder)}
+            >
+              <option value="oldest">{chinese ? '最早优先' : 'Oldest first'}</option>
+              <option value="newest">{chinese ? '最新优先' : 'Newest first'}</option>
+            </select>
           ) : null}
         </div>
 
@@ -239,11 +231,12 @@ export default function Giscus({ onDiscussionCreateRequest, onError }: IGiscusPr
             </a>
           ) : null}
           <a
+            title="Built with giscus"
             href="https://github.com/SonghaiFan/franklin-comments"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Franklin Comments · giscus
+            Franklin Comments
           </a>
         </footer>
       </div>

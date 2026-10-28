@@ -1,4 +1,10 @@
-import { MarkdownIcon, MarkGithubIcon, SignOutIcon, TypographyIcon } from '@primer/octicons-react';
+import {
+  ArrowUpRightIcon,
+  MarkdownIcon,
+  MarkGithubIcon,
+  SignOutIcon,
+  TypographyIcon,
+} from '@primer/octicons-react';
 import { ChangeEvent, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { adaptComment, adaptReply, handleCommentClick, processCommentBody } from '../lib/adapter';
 import { AuthContext } from '../lib/context';
@@ -144,7 +150,7 @@ export default function CommentBox({
     return (
       <div className="songhai-signin">
         <div>
-          <p className="songhai-invitation">{chinese ? '留下一点想法' : 'Leave a thought'}</p>
+          <p className="songhai-invitation">{chinese ? '有什么想法？' : 'What do you think?'}</p>
           <p className="songhai-signin-note">
             {chinese
               ? '使用 GitHub 登录，参与这段对话。'
@@ -153,7 +159,8 @@ export default function CommentBox({
         </div>
         <a className="btn btn-primary" target="_top" href={loginUrl}>
           <MarkGithubIcon />
-          {chinese ? '登录留言' : 'Join in'}
+          {chinese ? '用 GitHub 留言' : 'Continue with GitHub'}
+          <ArrowUpRightIcon size={14} />
         </a>
       </div>
     );
@@ -162,7 +169,7 @@ export default function CommentBox({
     <form
       className={`color-bg-primary color-border-primary gsc-comment-box ${
         isReply ? 'gsc-comment-box-is-reply' : ''
-      } ${className}`}
+      } ${input.trim() ? 'songhai-has-draft' : ''} ${className}`}
       onSubmit={(event) => {
         event.preventDefault();
         handleSubmit();
@@ -176,6 +183,7 @@ export default function CommentBox({
                 ? 'color-text-primary color-bg-canvas color-border-primary'
                 : 'color-text-secondary border-transparent'
             }`}
+            aria-pressed={!isPreview}
             onClick={() => setIsPreview(false)}
             type="button"
           >
@@ -187,6 +195,8 @@ export default function CommentBox({
                 ? 'color-text-primary color-bg-canvas color-border-primary'
                 : 'color-text-secondary border-transparent'
             }`}
+            aria-pressed={isPreview}
+            disabled={!input.trim()}
             onClick={() => setIsPreview(true)}
             type="button"
           >
@@ -232,7 +242,15 @@ export default function CommentBox({
               }`}
               aria-label={placeHolderText}
               dir="auto"
-              placeholder={token ? placeHolderText : t('signInToComment')}
+              placeholder={
+                chinese
+                  ? isReply
+                    ? '写下你的回复…'
+                    : '写下你的想法…'
+                  : isReply
+                    ? 'Write a reply…'
+                    : 'Leave a thought…'
+              }
               onChange={handleTextAreaChange}
               value={input}
               disabled={!token || isSubmitting}
@@ -283,7 +301,16 @@ export default function CommentBox({
               type="submit"
               disabled={(token && !input.trim()) || isSubmitting}
             >
-              {isReply ? t('reply') : t('comment')}
+              {isSubmitting
+                ? chinese
+                  ? '发送中…'
+                  : 'Sending…'
+                : isReply
+                  ? t('reply')
+                  : chinese
+                    ? '发布留言'
+                    : 'Post comment'}
+              {!isSubmitting ? <ArrowUpRightIcon size={14} /> : null}
             </button>
           ) : (
             <a
