@@ -26,13 +26,15 @@ export default function CommentBox({
   onSubmit,
   onDiscussionCreateRequest,
 }: CommentBoxProps) {
-  const { t } = useGiscusTranslation();
+  const { t, lang } = useGiscusTranslation();
+  const chinese = lang.startsWith('zh');
   const [isPreview, setIsPreview] = useState(false);
   const [input, setInput] = useState('');
   const [lastInput, setLastInput] = useState('');
   const [preview, setPreview] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [isReplyOpen, setIsReplyOpen] = useState(false);
   const [isFixedWidth, setIsFixedWidth] = useState(false);
   const [lastHeight, setLastHeight] = useState('');
@@ -65,36 +67,48 @@ export default function CommentBox({
   }, []);
 
   const handleSubmit = useCallback(async () => {
-    if (isSubmitting || (!discussionId && !onDiscussionCreateRequest)) return;
-    setIsSubmitting(true);
-
-    const id = discussionId ? discussionId : await onDiscussionCreateRequest();
-    const payload = { body: input, discussionId: id, replyToId };
-
-    if (!id) {
-      window.alert('Unable to create discussion.');
-      setIsSubmitting(false);
+    if (!token || !input.trim() || isSubmitting || (!discussionId && !onDiscussionCreateRequest))
       return;
-    }
+    setIsSubmitting(true);
+    setSubmitError('');
 
-    if (replyToId) {
-      addDiscussionReply(payload, token).then(({ data: { addDiscussionReply } }) => {
-        const { reply } = addDiscussionReply;
-        const adapted = adaptReply(reply);
+    try {
+      const id = discussionId ? discussionId : await onDiscussionCreateRequest();
+      const payload = { body: input, discussionId: id, replyToId };
 
-        onSubmit(adapted);
-        reset();
-      });
-    } else {
-      addDiscussionComment(payload, token).then(({ data: { addDiscussionComment } }) => {
-        const { comment } = addDiscussionComment;
-        const adapted = adaptComment(comment);
+      if (!id) {
+        window.alert('Unable to create discussion.');
+        setIsSubmitting(false);
+        return;
+      }
 
-        onSubmit(adapted);
-        reset();
-      });
+      if (replyToId) {
+        await addDiscussionReply(payload, token).then(({ data: { addDiscussionReply } }) => {
+          const { reply } = addDiscussionReply;
+          const adapted = adaptReply(reply);
+
+          onSubmit(adapted);
+          reset();
+        });
+      } else {
+        await addDiscussionComment(payload, token).then(({ data: { addDiscussionComment } }) => {
+          const { comment } = addDiscussionComment;
+          const adapted = adaptComment(comment);
+
+          onSubmit(adapted);
+          reset();
+        });
+      }
+    } catch {
+      setIsSubmitting(false);
+      setSubmitError(
+        chinese
+          ? '未能发送，请重试。你的文字仍在。'
+          : 'Could not send. Your draft is still here; please try again.',
+      );
     }
   }, [
+    chinese,
     isSubmitting,
     discussionId,
     input,
@@ -126,6 +140,24 @@ export default function CommentBox({
     if (isReplyOpen) textarea.current.focus();
   }, [isReplyOpen]);
 
+  if (!token && !isReply)
+    return (
+      <div className="songhai-signin">
+        <div>
+          <p className="songhai-invitation">{chinese ? '留下一点想法' : 'Leave a thought'}</p>
+          <p className="songhai-signin-note">
+            {chinese
+              ? '使用 GitHub 登录，参与这段对话。'
+              : 'Sign in with GitHub to join the conversation.'}
+          </p>
+        </div>
+        <a className="btn btn-primary" target="_top" href={loginUrl}>
+          <MarkGithubIcon />
+          {chinese ? '登录留言' : 'Join in'}
+        </a>
+      </div>
+    );
+
   return !isReply || isReplyOpen ? (
     <form
       className={`color-bg-primary color-border-primary gsc-comment-box ${
@@ -147,7 +179,7 @@ export default function CommentBox({
             onClick={() => setIsPreview(false)}
             type="button"
           >
-            {t('write')}
+            {chinese ? (isReply ? '写回复' : '写留言') : t('write')}
           </button>
           <button
             className={`ml-1 rounded-t border border-b-0 px-4 py-2 ${
@@ -172,7 +204,6 @@ export default function CommentBox({
                 setIsFixedWidth(!isFixedWidth);
                 textarea.current.focus();
               }}
-              tabIndex={-1}
             >
               <TypographyIcon />
             </button>
@@ -199,6 +230,7 @@ export default function CommentBox({
               className={`form-control input-contrast gsc-comment-box-textarea ${
                 isFixedWidth ? 'gsc-is-fixed-width' : ''
               }`}
+              aria-label={placeHolderText}
               dir="auto"
               placeholder={token ? placeHolderText : t('signInToComment')}
               onChange={handleTextAreaChange}
@@ -223,6 +255,11 @@ export default function CommentBox({
           </div>
         )}
       </div>
+      {submitError ? (
+        <p role="alert" className="songhai-submit-error">
+          {submitError}
+        </p>
+      ) : null}
       <div className="gsc-comment-box-bottom">
         {token && !isReply ? (
           <button type="button" className="link-secondary text-sm" onClick={onSignOut}>

@@ -1,3 +1,4 @@
+import { isSonghaiOrigin } from '../../../lib/songhai';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { encodeState } from '../../../lib/oauth/state';
 import { env } from '../../../lib/variables';
@@ -9,6 +10,11 @@ export default async function OAuthAuthorizeApi(req: NextApiRequest, res: NextAp
 
   if (!appReturnUrl) {
     res.status(400).json({ error: '`redirect_uri` is required.' });
+    return;
+  }
+
+  if (!isSonghaiOrigin(appReturnUrl)) {
+    res.status(403).json({ error: 'This return URL is not allowed.' });
     return;
   }
 

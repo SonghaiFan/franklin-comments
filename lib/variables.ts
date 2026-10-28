@@ -48,6 +48,8 @@ export const availableThemes = [
   'catppuccin_macchiato',
   'catppuccin_mocha',
   'fro',
+  'songhai_light',
+  'songhai_dark',
   'custom',
 ] as const;
 

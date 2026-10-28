@@ -3,7 +3,7 @@ const vanillaRTL = require('tailwindcss-vanilla-rtl');
 /** @type {import('tailwindcss/tailwind-config').TailwindConfig} */
 module.exports = {
   content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
-  important: '#__next',
+  important: false,
   safelist: ['mb-0', 'py-0'],
   darkMode: 'class',
   plugins: [vanillaRTL],

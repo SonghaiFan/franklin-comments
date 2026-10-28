@@ -1,0 +1,11 @@
+@import url('./noborder_dark.css');
+
+:root {
+  color-scheme: dark;
+
+  --comment-ink: #efeee9;
+  --comment-muted: #a5a4a0;
+  --comment-paper: #111;
+  --comment-line: #343434;
+  --comment-wash: #1d1d1d;
+}

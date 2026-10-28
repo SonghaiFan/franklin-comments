@@ -1,3 +1,4 @@
+import { songhai } from '../../../lib/songhai';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getDiscussion } from '../../../services/github/getDiscussion';
 import { adaptDiscussion } from '../../../lib/adapter';
@@ -125,6 +126,16 @@ async function post(req: NextApiRequest, res: NextApiResponse<{ id: string } | I
 
 export default async function DiscussionsApi(req: NextApiRequest, res: NextApiResponse) {
   addCorsHeaders(req, res);
+  const repo = req.method === 'POST' ? req.body?.repo : req.query.repo;
+  if (
+    repo !== songhai.repo ||
+    (req.method === 'POST' &&
+      (req.body?.input?.repositoryId !== songhai.repoId ||
+        req.body?.input?.categoryId !== songhai.categoryId))
+  ) {
+    res.status(403).json({ error: 'Repository or category not allowed.' });
+    return;
+  }
   if (req.method === 'POST') {
     await post(req, res);
     return;

@@ -1,3 +1,4 @@
+import { songhai } from '../../../lib/songhai';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { addCorsHeaders } from '../../../lib/cors';
 import { ICategories, IError } from '../../../lib/types/adapter';
@@ -9,6 +10,10 @@ export default async function DiscussionCategoriesApi(
   res: NextApiResponse<ICategories | IError>,
 ) {
   addCorsHeaders(req, res);
+  if (req.query.repo !== songhai.repo) {
+    res.status(403).json({ error: 'Repository not allowed.' });
+    return;
+  }
 
   const params = { repo: req.query.repo as string };
   const result = { repositoryId: '', categories: [] };

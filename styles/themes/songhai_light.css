@@ -1,0 +1,11 @@
+@import url('./noborder_light.css');
+
+:root {
+  color-scheme: light;
+
+  --comment-ink: #1b1a18;
+  --comment-muted: #75706a;
+  --comment-paper: #f7f6f3;
+  --comment-line: #e0dcd5;
+  --comment-wash: #edebe6;
+}

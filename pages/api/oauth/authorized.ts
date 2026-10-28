@@ -1,3 +1,4 @@
+import { isSonghaiOrigin } from '../../../lib/songhai';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { encodeState, decodeState } from '../../../lib/oauth/state';
 import { env } from '../../../lib/variables';
@@ -20,6 +21,10 @@ export default async function OAuthAuthorizedApi(req: NextApiRequest, res: NextA
     return;
   }
 
+  if (!isSonghaiOrigin(appReturnUrl)) {
+    res.status(403).json({ error: 'This return URL is not allowed.' });
+    return;
+  }
   const returnUrl = new URL(appReturnUrl);
 
   if (error && error === 'access_denied') {
@@ -42,11 +47,16 @@ export default async function OAuthAuthorizedApi(req: NextApiRequest, res: NextA
   };
 
   let accessToken: string;
+  let validityPeriod = TOKEN_VALIDITY_PERIOD;
   try {
     const response = await fetch(GITHUB_OAUTH_ACCESS_TOKEN_URL, init);
     if (response.ok) {
       const data = await response.json();
+      if (typeof data.access_token !== 'string')
+        throw new Error('GitHub did not return an access token.');
       accessToken = data.access_token;
+      if (Number.isFinite(data.expires_in) && data.expires_in > 0)
+        validityPeriod = Math.min(TOKEN_VALIDITY_PERIOD, data.expires_in * 1000);
     } else {
       throw new Error(`Access token response had status ${response.status}.`);
     }
@@ -55,11 +65,7 @@ export default async function OAuthAuthorizedApi(req: NextApiRequest, res: NextA
     return;
   }
 
-  const session = await encodeState(
-    accessToken,
-    encryption_password,
-    Date.now() + TOKEN_VALIDITY_PERIOD,
-  );
+  const session = await encodeState(accessToken, encryption_password, Date.now() + validityPeriod);
   returnUrl.searchParams.set('giscus', session);
 
   res.redirect(302, returnUrl.href);

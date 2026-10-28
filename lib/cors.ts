@@ -1,16 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { assertOrigin } from './config';
-import { env } from './variables';
+import { isSonghaiOrigin } from './songhai';
 
 export function addCorsHeaders(req: NextApiRequest, res: NextApiResponse) {
-  const config = {
-    origins: env.origins,
-    originsRegex: env.origins_regex,
-  };
-
-  if (!assertOrigin(req.headers.origin, config)) {
-    res.setHeader('Access-Control-Allow-Origin', config.origins[0]);
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  const origin = req.headers.origin;
+  res.setHeader('Vary', 'Origin');
+  if (typeof origin === 'string' && isSonghaiOrigin(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', new URL(origin).origin);
   }
 }

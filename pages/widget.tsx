@@ -1,3 +1,4 @@
+import { isSonghaiOrigin, songhai } from '../lib/songhai';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
 import { ContextType, useContext, useEffect, useState } from 'react';
@@ -29,6 +30,16 @@ export async function getServerSideProps({ query, res }: GetServerSidePropsConte
   const theme = ((query.theme as string) || 'preferred_color_scheme') as Theme;
   const { origin, originHost } = getOriginHost((query.origin as string) || '');
   const backLink = (query.backLink as string) || origin;
+
+  if (
+    repo !== songhai.repo ||
+    repoId !== songhai.repoId ||
+    categoryId !== songhai.categoryId ||
+    !isSonghaiOrigin(origin)
+  ) {
+    res.setHeader('Content-Security-Policy', "frame-ancestors 'none'");
+    return { notFound: true };
+  }
 
   const { encryption_password } = env;
   const token = await decodeState(session, encryption_password)

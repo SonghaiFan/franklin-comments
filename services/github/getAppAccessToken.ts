@@ -1,3 +1,4 @@
+import { songhai } from '../../lib/songhai';
 import { getJWT } from '../../lib/jwt';
 
 import { GITHUB_REPO_INSTALLATION_URL, GITHUB_ACCESS_TOKEN_URL } from '../config';
@@ -29,6 +30,7 @@ async function getInstallationId(repoWithOwner: string): Promise<number> {
 }
 
 export async function getAppAccessToken(repoWithOwner: string): Promise<string> {
+  if (repoWithOwner !== songhai.repo) throw new Error('Repository not allowed.');
   const installationId = await getInstallationId(repoWithOwner);
   if (!installationId)
     throw {

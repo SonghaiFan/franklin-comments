@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext, ConfigContext } from '../lib/context';
-import { Trans, useGiscusTranslation } from '../lib/i18n';
+import { useGiscusTranslation } from '../lib/i18n';
 import { emitData } from '../lib/messages';
 import { CommentOrder, IMetadataMessage } from '../lib/types/giscus';
 import { useFrontBackDiscussion } from '../services/giscus/discussions';
@@ -70,7 +70,6 @@ export default function Giscus({ onDiscussionCreateRequest, onError }: IGiscusPr
   );
 
   const shouldCreateDiscussion = data.isNotFound && !number;
-  const shouldShowBranding = !!data.discussion.url;
 
   const shouldShowReplyCount =
     !data.error && !data.isNotFound && !data.isLoading && data.totalReplyCount > 0;
@@ -118,6 +117,7 @@ export default function Giscus({ onDiscussionCreateRequest, onError }: IGiscusPr
       ) : null}
 
       <div className="gsc-comments">
+        {shouldShowCommentBox && inputPosition === 'top' ? mainCommentBox : null}
         <div className="gsc-header">
           <div className="gsc-left-header">
             <h4 className="gsc-comments-count">
@@ -147,23 +147,6 @@ export default function Giscus({ onDiscussionCreateRequest, onError }: IGiscusPr
                 </h4>
               </>
             ) : null}
-            {shouldShowBranding ? (
-              <em className="color-text-secondary text-sm">
-                <Trans
-                  i18nKey="common:poweredBy"
-                  components={{
-                    a: (
-                      <a
-                        href="https://giscus.app"
-                        target="_blank"
-                        rel="noreferrer noopener nofollow"
-                        className="link-secondary"
-                      />
-                    ),
-                  }}
-                />
-              </em>
-            ) : null}
           </div>
           {data.totalCommentCount > 0 ? (
             <ul className="gsc-right-header BtnGroup">
@@ -186,8 +169,6 @@ export default function Giscus({ onDiscussionCreateRequest, onError }: IGiscusPr
             </ul>
           ) : null}
         </div>
-
-        {shouldShowCommentBox && inputPosition === 'top' ? mainCommentBox : null}
 
         <div className={`gsc-timeline ${!data.totalCommentCount ? 'hidden' : ''}`}>
           {!data.isLoading
@@ -251,6 +232,20 @@ export default function Giscus({ onDiscussionCreateRequest, onError }: IGiscusPr
         </div>
 
         {shouldShowCommentBox && inputPosition !== 'top' ? mainCommentBox : null}
+        <footer className="songhai-footer">
+          {data.discussion.url ? (
+            <a href={data.discussion.url} target="_blank" rel="noopener noreferrer">
+              GitHub ↗
+            </a>
+          ) : null}
+          <a
+            href="https://github.com/SonghaiFan/comments"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Songhai Comments · giscus
+          </a>
+        </footer>
       </div>
     </div>
   );
