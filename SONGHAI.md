@@ -20,6 +20,6 @@ components/Giscus.tsx owns the composer → discussion summary → timeline → 
 
 ## Deploy and rollback
 
-Vercel project songhai-comments builds this fork. Secrets belong only in encrypted server environment variables. Add comments.songhai.site to that project and configure the exact CNAME Vercel returns. OAuth callbacks include the production endpoint and the explicit local endpoint. Keep upstream giscus installed until the fork is fully verified.
+Vercel project franklin-comments builds this fork. Secrets belong only in encrypted server environment variables. Add comments.songhai.site to that project and configure the exact CNAME Vercel returns. OAuth callbacks include the production endpoint and the explicit local endpoint. Keep upstream giscus installed until the fork is fully verified.
 
 Publish the service first, verify original discussions and GitHub OAuth, then publish the website embed switch. To roll back, restore the website's previous engagement module and theme assets; discussions stay intact in GitHub. Do not remove the old App or revoke existing credentials during rollout.

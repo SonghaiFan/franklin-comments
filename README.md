@@ -1,3 +1,11 @@
+# Franklin Comments
+
+The shared comment interface for [songhai.site](https://songhai.site) and [blog.songhai.site](https://blog.songhai.site), served at [comments.songhai.site](https://comments.songhai.site). Forked from giscus; existing comments remain in SonghaiFan/website Discussions.
+
+See [our development, deployment and rollback guide](SONGHAI.md). The upstream project documentation follows.
+
+---
+
 # [giscus][giscus]
 
 A comments system powered by [GitHub Discussions][discussions]. Let visitors leave comments and reactions on your website via GitHub! Heavily inspired by [utterances][utterances].
