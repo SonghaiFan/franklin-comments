@@ -239,11 +239,11 @@ export default function Giscus({ onDiscussionCreateRequest, onError }: IGiscusPr
             </a>
           ) : null}
           <a
-            href="https://github.com/SonghaiFan/comments"
+            href="https://github.com/SonghaiFan/franklin-comments"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Songhai Comments · giscus
+            Franklin Comments · giscus
           </a>
         </footer>
       </div>

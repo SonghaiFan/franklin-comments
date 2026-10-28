@@ -1,5 +1,5 @@
 (function () {
-  const GISCUS_SESSION_KEY = 'songhai-comments-session';
+  const GISCUS_SESSION_KEY = 'franklin-comments-session';
   const script = document.currentScript as HTMLScriptElement;
   const giscusOrigin = new URL(script.src).origin;
 

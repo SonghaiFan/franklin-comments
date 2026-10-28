@@ -4,7 +4,7 @@ export default function CommentsHome() {
   return (
     <>
       <Head>
-        <title>Songhai Comments</title>
+        <title>Franklin Comments</title>
         <meta name="description" content="A place for conversations on Songhai's website." />
       </Head>
       <main
@@ -25,7 +25,7 @@ export default function CommentsHome() {
           <a href="https://blog.songhai.site">博客 ↗</a>
         </nav>
         <p style={{ marginTop: 64, fontSize: 12, color: '#75706a' }}>
-          <a href="https://github.com/SonghaiFan/comments">Songhai Comments</a> · Built with{' '}
+          <a href="https://github.com/SonghaiFan/franklin-comments">Franklin Comments</a> · Built with{' '}
           <a href="https://github.com/giscus/giscus">giscus</a>
         </p>
       </main>

@@ -10,7 +10,7 @@ body {
   color: var(--comment-ink);
 }
 
-main {
+main[data-theme] {
   --color-fg-default: var(--comment-ink);
   --color-fg-muted: var(--comment-muted);
   --color-fg-subtle: var(--comment-muted);

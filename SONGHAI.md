@@ -1,4 +1,4 @@
-# Songhai Comments
+# Franklin Comments
 
 A self-hosted fork of [giscus](https://github.com/giscus/giscus), shared by songhai.site and blog.songhai.site at comments.songhai.site. The original MIT license and upstream attribution are retained.
 

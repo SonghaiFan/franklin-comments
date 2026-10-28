@@ -46,6 +46,7 @@ const swr = 60 * 60 * 24 * 7; // 7 days
 
 const config = withBundleAnalyzer(
   nextTranslate({
+    devIndicators: false,
     async headers() {
       return [
         {
