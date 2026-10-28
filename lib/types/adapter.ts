@@ -28,6 +28,7 @@ interface IBaseComment {
   id: string;
   author: IUser;
   viewerDidAuthor: boolean;
+  viewerCanDelete?: boolean;
   createdAt: string;
   url: string;
   authorAssociation: ICommentAuthorAssociation;

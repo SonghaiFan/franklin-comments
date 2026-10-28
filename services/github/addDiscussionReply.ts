@@ -12,6 +12,7 @@ const ADD_DISCUSSION_REPLY_QUERY = `
           url
         }
         viewerDidAuthor
+      viewerCanDelete
         createdAt
         url
         authorAssociation

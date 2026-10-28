@@ -23,3 +23,9 @@ components/Giscus.tsx owns the composer → discussion summary → timeline → 
 Vercel project franklin-comments builds this fork. Secrets belong only in encrypted server environment variables. Add comments.songhai.site to that project and configure the exact CNAME Vercel returns. OAuth callbacks include the production endpoint and the explicit local endpoint. Keep upstream giscus installed until the fork is fully verified.
 
 Publish the service first, verify original discussions and GitHub OAuth, then publish the website embed switch. To roll back, restore the website's previous engagement module and theme assets; discussions stay intact in GitHub. Do not remove the old App or revoke existing credentials during rollout.
+
+## Discussion identity and moderation
+
+`data-term` is the stable discussion key (`blog:<slug>`); `data-discussion-title` is the readable page title. Creation stores the key hash separately from the title, so Chinese titles remain readable on GitHub. Existing old blog mappings are intentionally not migrated.
+
+Deletion is shown only to signed-in viewers for whom GitHub returns `viewerCanDelete`. Repository owners can moderate all comments; other signed-in users can delete their own. The mutation uses the viewer token, never the App token, and GitHub enforces permission. Anonymous viewers see no delete action. A confirmation precedes deletion; existing replies remain.

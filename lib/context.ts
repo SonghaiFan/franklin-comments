@@ -37,6 +37,7 @@ interface IConfigContext {
   category: string;
   categoryId: string;
   term: string;
+  discussionTitle?: string;
   description: string;
   backLink: string;
   number: number;

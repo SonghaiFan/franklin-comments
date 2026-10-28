@@ -39,6 +39,7 @@ const DISCUSSION_QUERY = `
         url
       }
       viewerDidAuthor
+      viewerCanDelete
       createdAt
       url
       authorAssociation
@@ -63,6 +64,7 @@ const DISCUSSION_QUERY = `
             url
           }
           viewerDidAuthor
+      viewerCanDelete
           createdAt
           url
           authorAssociation

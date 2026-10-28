@@ -23,6 +23,7 @@ export async function getServerSideProps({ query, res }: GetServerSidePropsConte
   const strict = Boolean(+query.strict);
   const repoId = (query.repoId as string) || '';
   const categoryId = (query.categoryId as string) || '';
+  const discussionTitle = String(query.discussionTitle || '').slice(0, 256);
   const description = (query.description as string) || '';
   const reactionsEnabled = Boolean(+query.reactionsEnabled);
   const emitMetadata = Boolean(+query.emitMetadata);
@@ -83,6 +84,7 @@ export async function getServerSideProps({ query, res }: GetServerSidePropsConte
       strict,
       repoId,
       categoryId,
+      discussionTitle,
       description,
       reactionsEnabled,
       emitMetadata,
@@ -105,6 +107,7 @@ export default function WidgetPage({
   strict,
   repoId,
   categoryId,
+  discussionTitle,
   description,
   reactionsEnabled,
   emitMetadata,
@@ -121,6 +124,7 @@ export default function WidgetPage({
     repoId,
     category,
     categoryId,
+    discussionTitle,
     description,
     backLink,
     term,

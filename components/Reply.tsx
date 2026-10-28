@@ -1,3 +1,4 @@
+import DeleteComment from './DeleteComment';
 import ReactButtons from './ReactButtons';
 import { IReply } from '../lib/types/adapter';
 import { useCallback } from 'react';
@@ -6,11 +7,12 @@ import { handleCommentClick, processCommentBody } from '../lib/adapter';
 import { useDateFormatter, useGiscusTranslation, useRelativeTimeFormatter } from '../lib/i18n';
 
 interface IReplyProps {
+  onDeleted?: () => void;
   reply: IReply;
   onReplyUpdate: (newReply: IReply, promise: Promise<unknown>) => void;
 }
 
-export default function Reply({ reply, onReplyUpdate }: IReplyProps) {
+export default function Reply({ reply, onReplyUpdate, onDeleted }: IReplyProps) {
   const { t } = useGiscusTranslation();
   const formatDate = useDateFormatter();
   const formatDateDistance = useRelativeTimeFormatter();
@@ -111,6 +113,7 @@ export default function Reply({ reply, onReplyUpdate }: IReplyProps) {
           </div>
           {!hidden ? (
             <div className="gsc-reply-footer">
+              <DeleteComment id={reply.id} allowed={reply.viewerCanDelete} onDeleted={onDeleted} />
               <div className="gsc-reply-reactions">
                 <ReactButtons
                   reactionGroups={reply.reactions}

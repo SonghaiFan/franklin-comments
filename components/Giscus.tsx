@@ -168,6 +168,10 @@ export default function Giscus({ onDiscussionCreateRequest, onError }: IGiscusPr
                 <Comment
                   key={comment.id}
                   comment={comment}
+                  onDeleted={() => {
+                    frontMutators.mutate();
+                    backMutators.mutate();
+                  }}
                   replyBox={
                     token && !data.isLocked ? (
                       <CommentBox
@@ -206,6 +210,10 @@ export default function Giscus({ onDiscussionCreateRequest, onError }: IGiscusPr
                 <Comment
                   key={comment.id}
                   comment={comment}
+                  onDeleted={() => {
+                    frontMutators.mutate();
+                    backMutators.mutate();
+                  }}
                   replyBox={
                     token && !data.isLocked ? (
                       <CommentBox

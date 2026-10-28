@@ -190,7 +190,6 @@ summary:focus-visible {
 .gsc-comment-box-md-toolbar {
   margin: 0;
   color: var(--comment-muted);
-
   opacity: 0.6;
 }
 
@@ -258,7 +257,6 @@ summary:focus-visible {
   box-shadow: none;
   font-size: 13px;
   font-weight: 500;
-
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -281,7 +279,6 @@ summary:focus-visible {
 
 .gsc-comment-header {
   padding: 0 0 8px !important;
-
   gap: 12px;
 }
 
@@ -569,4 +566,21 @@ summary:focus-visible {
   .songhai-signin {
     gap: 16px;
   }
+}
+
+.franklin-moderation {
+  display: inline-flex;
+  gap: 8px;
+  margin-right: 14px;
+  font-size: 12px;
+  color: var(--comment-muted);
+}
+
+.franklin-moderation button:hover {
+  color: var(--comment-ink);
+  text-decoration: underline;
+}
+
+.franklin-moderation button:disabled {
+  opacity: 0.5;
 }

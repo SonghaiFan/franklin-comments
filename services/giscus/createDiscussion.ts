@@ -4,6 +4,7 @@ export async function createDiscussion(
   token: string,
   repo: string,
   input: GCreateDiscussionInput,
+  term?: string,
 ): Promise<string> {
   const { id } = await fetch(`/api/discussions`, {
     method: 'POST',
@@ -11,7 +12,7 @@ export async function createDiscussion(
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ repo, input }),
+    body: JSON.stringify({ repo, input, term }),
   }).then((r) => r.json());
   return id;
 }

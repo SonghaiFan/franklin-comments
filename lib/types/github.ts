@@ -30,6 +30,7 @@ interface GBaseComment {
   id: string;
   author: GRepositoryDiscussionAuthor | null;
   viewerDidAuthor: boolean;
+  viewerCanDelete?: boolean;
   createdAt: string;
   url: string;
   authorAssociation: GCommentAuthorAssociation;

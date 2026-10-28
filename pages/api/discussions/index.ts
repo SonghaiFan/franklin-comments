@@ -101,7 +101,7 @@ async function post(req: NextApiRequest, res: NextApiResponse<{ id: string } | I
 
   const { repo, input } = req.body;
   const params: CreateDiscussionBody = { input };
-  const hashTag = `<!-- sha1: ${await digestMessage(params.input.title)} -->`;
+  const hashTag = `<!-- sha1: ${await digestMessage(typeof req.body.term === 'string' && req.body.term ? req.body.term : params.input.title)} -->`;
 
   params.input.body = `${params.input.body}\n\n${hashTag}`;
 

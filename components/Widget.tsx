@@ -15,18 +15,23 @@ interface IWidgetProps {
 export default function Widget({ origin, session }: IWidgetProps) {
   const [token, setToken] = useState('');
   const [createDiscussionPromise, setCreateDiscussionPromise] = useState<Promise<string>>();
-  const { repo, repoId, categoryId, description, backLink, term, number } =
+  const { repo, repoId, categoryId, discussionTitle, description, backLink, term, number } =
     useContext(ConfigContext);
 
   const handleDiscussionCreateRequest = async () => {
     if (createDiscussionPromise) return createDiscussionPromise;
 
-    const promise = createDiscussion(token, repo, {
-      repositoryId: repoId,
-      categoryId,
-      title: term,
-      body: `# ${term}\n\n${description || ''}\n\n${cleanAnchor(backLink || origin)}`,
-    });
+    const promise = createDiscussion(
+      token,
+      repo,
+      {
+        repositoryId: repoId,
+        categoryId,
+        title: discussionTitle || term,
+        body: `# ${discussionTitle || term}\n\n${description || ''}\n\n[阅读原文 ↗](${cleanAnchor(backLink || origin)})`,
+      },
+      term,
+    );
     setCreateDiscussionPromise(promise);
 
     return promise;

@@ -1,3 +1,4 @@
+import DeleteComment from './DeleteComment';
 import { ArrowUpIcon, KebabHorizontalIcon } from '@primer/octicons-react';
 import { ReactElement, ReactNode, useCallback, useContext, useState } from 'react';
 import { handleCommentClick, processCommentBody } from '../lib/adapter';
@@ -11,6 +12,7 @@ import { AuthContext } from '../lib/context';
 import { useDateFormatter, useGiscusTranslation, useRelativeTimeFormatter } from '../lib/i18n';
 
 interface ICommentProps {
+  onDeleted?: () => void;
   children?: ReactNode;
   comment: IComment;
   replyBox?: ReactElement<typeof CommentBox>;
@@ -20,6 +22,7 @@ interface ICommentProps {
 
 export default function Comment({
   children,
+  onDeleted,
   comment,
   replyBox,
   onCommentUpdate,
@@ -189,6 +192,11 @@ export default function Comment({
               ) : null}
             </div>
             <div className="gsc-comment-replies-count">
+              <DeleteComment
+                id={comment.id}
+                allowed={!hidden && comment.viewerCanDelete}
+                onDeleted={onDeleted}
+              />
               <span className="color-text-tertiary text-xs">
                 {t('replies', { count: comment.replyCount, plus: '' })}
               </span>
@@ -228,7 +236,12 @@ export default function Comment({
 
             {onReplyUpdate
               ? replies.map((reply) => (
-                  <Reply key={reply.id} reply={reply} onReplyUpdate={onReplyUpdate} />
+                  <Reply
+                    key={reply.id}
+                    reply={reply}
+                    onReplyUpdate={onReplyUpdate}
+                    onDeleted={onDeleted}
+                  />
                 ))
               : null}
           </div>

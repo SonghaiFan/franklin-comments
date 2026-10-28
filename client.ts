@@ -50,6 +50,7 @@
   params.category = attributes.category || '';
   params.categoryId = attributes.categoryId as string;
   params.strict = attributes.strict || '0';
+  params.discussionTitle = attributes.discussionTitle || document.title;
   params.description = getMetaContent('description', true);
   params.backLink = getMetaContent('giscus:backlink') || cleanedLocation;
 

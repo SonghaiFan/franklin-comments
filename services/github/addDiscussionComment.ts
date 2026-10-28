@@ -15,6 +15,7 @@ const ADD_DISCUSSION_COMMENT_QUERY = `
           url
         }
         viewerDidAuthor
+      viewerCanDelete
         createdAt
         url
         authorAssociation
